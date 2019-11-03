@@ -1,0 +1,81 @@
+" whitespace
+set tabstop=4
+set shiftwidth=4
+set breakindent
+set linebreak
+set nolist
+
+" f vi
+set nocompatible
+
+" make colors work for this silly lil terminal
+if &term =~ '256color'
+	set t_ut=
+endif
+
+" colors !
+syntax enable
+colorscheme elflord
+
+" save me but also clear highlights
+nnoremap <Space> :w<CR>
+
+" some basic stuff
+set wrap
+set number
+set wildmenu
+set laststatus=2
+set ruler
+nmap j gj
+nmap k gk
+set autoindent
+set showcmd
+set autochdir
+set backspace=indent,eol,start
+set autowrite
+set scrolloff=4
+
+" i wanna change this file
+nmap <Leader>ev :vnew $MYVIMRC<CR>
+nmap <Leader>sv :so $MYVIMRC<CR>
+
+" copy paste to system clipboard
+nnoremap <Leader>y "+y
+nnoremap <Leader>p "+p
+
+" searching + highlighting
+set incsearch
+set hlsearch
+nnoremap <Leader><Space> :nohls<CR>
+
+" so i can read lol
+set background=dark
+
+" enable file-specific stuff
+filetype on
+
+" my latex stuff
+augroup latex
+	au!
+	au FileType *tex imap \[ \[<CR>\]<Esc>kA
+	" whatever command to automatically run pdflatex and show a pdf
+	au FileType *tex nmap <Leader>b :execute '!pdflatex' expand('%:p')<CR>
+	au FileType *tex nmap <Leader>d :execute  '!mupdf' expand('%:p:r') . '.pdf'
+	au FileType *tex imap <C-e> <Esc>:call Environment()<CR>
+	au FileType *tex set spell
+augroup END
+
+function! Environment()
+	let env = input('Environment name? ')
+	exec "normal a\\begin{" . env . "}\<CR>\\end{" . env . "}\<Esc>ko\<Tab>"
+	:startinsert
+endfunction
+
+" stuf fr Plug
+call plug#begin('~/.vim/plugs')
+	Plug 'dylanaraps/wal.vim'
+	Plug 'dylanaraps/fff.vim'
+call plug#end()
+
+colors wal
+setlocal indentexpr=

@@ -1,0 +1,15 @@
+# lazy scrolling
+map <C-=> zoom in
+map <C--> zoom out
+set recolor-darkcolor "#E8E3E4"
+set recolor-lightcolor "#12170E"
+set guioptions "svh"
+set window-height 1300
+set window-width 975
+set page-padding 5
+set smooth-scroll true
+set adjust-open "width"
+set font "RobotoMono 11"
+unmap - zoom out
+set window-title-home-tilde true
+set statusbar-home-tilde true
