@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#include <X11/XF86keysym.h>
 
 /* appearance */
 static const unsigned int borderpx  = 8;        /* border pixel of windows */
@@ -7,7 +8,7 @@ static const unsigned int gappih    = 15;       /* horiz inner gap between windo
 static const unsigned int gappiv    = 15;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 15;       /* horiz outer gap between windows and screen edge */
 static const unsigned int gappov    = 15;       /* vert outer gap between windows and screen edge */
-static const int smartgaps = 0;                 /* 1 means no outer gap when there is only one window */
+static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "RobotoMono:size=10" };
@@ -57,14 +58,24 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, NULL};
 static const char *termcmd[]  = { "st", NULL };
+static const char *chromiumcmd[] = { "chromium", NULL };
+static const char *rangercmd[] = { "st", "f", NULL };
+static const char *lightup[] = { "xbacklight", "-inc", "10", NULL };
+static const char *lightdown[] = { "xbacklight", "-dec", "10", NULL };
+static const char *smalllightup[] = { "xbacklight", "-inc", "5", NULL };
+static const char *smalllightdown[] = { "xbacklight", "-dec", "5", NULL };
+static const char *volup[] = { "amixer", "-q", "sset", "\"Master\"", "3%+", NULL };
+static const char *voldown[] = { "amixer", "-q", "sset", "\"Master\"", "3%-", NULL };
+static const char *mute[] = { "amixer", "-q", "sset", "\"Master\"", "toggle", NULL };
 
 static Key keys[] = {
 	/* modifier                     key              function        argument */
 	{ WINKEY,                       XK_r,            spawn,          {.v = dmenucmd } },    /* run dmenu */
 	{ WINKEY,                       XK_t,            spawn,          {.v = termcmd } },     /* start terminal (st) */
+	{ WINKEY,                       XK_c,            spawn,          {.v = chromiumcmd } },   /* chromium */
 	{ WINKEY,                       XK_b,            togglebar,      {0} },                 /* toggle top bar */
 	{ WINKEY,                       XK_j,            focusstack,     {.i = +1 } },          /* next window */
-	{ ALTKEY,                       XK_Tab,          focusstack,     {.i = +1} },           /* next window */
+	{ ALTKEY,                       XK_Tab,          focusstack,     {0} },                 /* traditional alt-tab */
 	{ WINKEY,                       XK_k,            focusstack,     {.i = -1} },           /* previous window */
 	{ ALTKEY|ShiftMask,             XK_Tab,          focusstack,     {.i = -1 } },          /* previous window */
 	{ WINKEY,                       XK_braceright,   incnmaster,     {.i = +1 } },          /* add window to master */
@@ -85,7 +96,8 @@ static Key keys[] = {
 	{ WINKEY,                       XK_period,       focusmon,       {.i = +1 } },          /* foucs next screen */
 	{ WINKEY|ShiftMask,             XK_comma,        tagmon,         {.i = -1 } },          /* send window to previous screen */
 	{ WINKEY|ShiftMask,             XK_period,       tagmon,         {.i = +1 } },          /* send window to next screen */
-	{ WINKEY,                       XK_d,            toggleview,     {.v = NULL} },                 /* hide all tags */
+	{ WINKEY,                       XK_d,            toggleview,     {.v = NULL} },         /* hide all tags */
+	{ WINKEY,                       XK_e,            spawn,          {.v = rangercmd} },
 	TAGKEYS(                        XK_1,                            0)
 	TAGKEYS(                        XK_2,                            1)
 	TAGKEYS(                        XK_3,                            2)
@@ -96,21 +108,27 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                            7)
 	TAGKEYS(                        XK_9,                            8)
 	{ ALTKEY|ShiftMask,             XK_q,            quit,           {0} },
+	/* modifier                     XF86 key                   function    argument */
+	{ 0,                            XF86XK_MonBrightnessUp,    spawn,      {.v = lightup } },
+	{ 0,                            XF86XK_MonBrightnessDown,  spawn,      {.v = lightdown } },
+	{ ALTKEY,                       XF86XK_MonBrightnessUp,    spawn,      {.v = smalllightup } },
+	{ ALTKEY,                       XF86XK_MonBrightnessDown,  spawn,      {.v = smalllightdown } },
+	{ 0,                            XF86XK_AudioLowerVolume,   spawn,      {.v = voldown } },
+	{ 0,                            XF86XK_AudioRaiseVolume,   spawn,      {.v = volup } },
+	{ 0,                            XF86XK_AudioMute,          spawn,      {.v = mute } },
 };
 
 /* button definitions */
-/* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
+/* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask           button          function        argument */
 	{ ClkLtSymbol,          0,                   Button1,        setlayout,      {0} },
-	{ ClkLtSymbol,          0,                   Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkStatusText,        0,                   Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         WINKEY,              Button1,        movemouse,      {0} },
-	{ ClkClientWin,         WINKEY,              Button2,        togglefloating, {0} },
 	{ ClkClientWin,         WINKEY|ControlMask,  Button1,        resizemouse,    {0} },
 	{ ClkTagBar,            0,                   Button1,        view,           {0} },
 	{ ClkTagBar,            0,                   Button3,        toggleview,     {0} },
+	{ ClkTagBar,            ShiftMask,           Button1,        toggleview,     {0} },
 	{ ClkTagBar,            WINKEY,              Button1,        tag,            {0} },
 	{ ClkTagBar,            WINKEY,              Button3,        toggletag,      {0} },
+	{ ClkTagBar,            WINKEY|ShiftMask,    Button1,        toggletag,      {0} },
 };
-
