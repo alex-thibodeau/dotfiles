@@ -16,8 +16,6 @@ rose() {
 	cat ~/.ascii_art/rose.txt
 }
 
-export EDITOR="vim"
-
 # tbh i do not know what this does
 tput smkx
 

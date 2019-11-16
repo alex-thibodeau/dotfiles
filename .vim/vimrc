@@ -36,8 +36,8 @@ set autowrite
 set scrolloff=4
 
 " i wanna change this file
-nmap <Leader>ev :vnew $MYVIMRC<CR>
-nmap <Leader>sv :so $MYVIMRC<CR>
+map <Leader>ev :vnew $MYVIMRC<CR>
+map <Leader>sv :so $MYVIMRC<CR>
 
 " copy paste to system clipboard
 nnoremap <Leader>y "+y
