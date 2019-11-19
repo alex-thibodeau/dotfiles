@@ -12,6 +12,8 @@ static const int staggerx           = 60;
 static const int staggery           = 60;
 static const int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static int enablegaps               = 1;
+static const int barpad             = 15;       /* additional vertical bar padding */
+static const int txtpad             = 15;       /* additional text padding */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "RobotoMono:size=10" };
