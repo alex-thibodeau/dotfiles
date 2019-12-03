@@ -23,6 +23,7 @@ static const char dmenufont[]       = "RobotoMono:size=10";
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static char *tagdescs[] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -92,7 +93,7 @@ static Key keys[] = {
 	{ WINKEY,                       XK_q,            killclient,     {0} },                 /* close window */
 	{ WINKEY,                       XK_l,            setlayout,      {.v = &layouts[1]} },  /* set layout 0 (default tiling) */
 	{ WINKEY,                       XK_f,            setlayout,      {.v = &layouts[0]} },  /* set layout 1 (default float) */
-	{ WINKEY,                       XK_w,            setlayout,      {.v = &layouts[2]} },  /* set layout 2 (default mono) */
+	{ WINKEY,                       XK_s,            setlayout,      {.v = &layouts[2]} },  /* set layout 2 (default mono) */
 	{ WINKEY,                       XK_space,        setlayout,      {0} },                 /* next/previous layout */
 	{ WINKEY|ShiftMask,             XK_space,        togglefloating, {0} },                 /* toggle between float/not */
 	{ WINKEY,                       XK_0,            view,           {.ui = ~0 } },         /* view all windows with any tag */
@@ -105,6 +106,7 @@ static Key keys[] = {
 	{ WINKEY,                       XK_e,            spawn,          {.v = rangercmd} },
 	{ WINKEY,                       XK_n,            spawn,          {.v = incognitocmd} },
 	{ WINKEY,                       XK_m,            floatingmaximize, {0} },
+	{ WINKEY|ShiftMask,             XK_c,            center,         {0} },
 	TAGKEYS(                        XK_1,                            0)
 	TAGKEYS(                        XK_2,                            1)
 	TAGKEYS(                        XK_3,                            2)
