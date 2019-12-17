@@ -32,13 +32,11 @@ set autowrite
 set scrolloff=4
 set foldcolumn=1
 
-" i wanna change this file
-map <Leader>ev :vnew $MYVIMRC<CR>
 map <Leader>sv :so $MYVIMRC<CR>
 
 " copy paste to system clipboard
-nnoremap <Leader>y "+y
-nnoremap <Leader>p "+p
+noremap <Leader>y "+y
+noremap <Leader>p "+p
 
 " searching + highlighting
 set incsearch
@@ -72,9 +70,13 @@ endfunction
 " stuf fr Plug
 call plug#begin('~/.vim/plugs')
 	Plug 'dylanaraps/wal.vim'
-	Plug 'dylanaraps/fff.vim'
+	Plug 'junegunn/vim-easy-align'
 call plug#end()
 
 " colors !
 syntax enable
 colors wal
+
+" things for align
+vmap <Enter> <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
